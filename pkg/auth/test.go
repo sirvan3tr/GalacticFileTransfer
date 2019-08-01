@@ -1,4 +1,4 @@
-package auth
+package main
 
 import (
 	"crypto/rand"
@@ -8,6 +8,13 @@ import (
 	"encoding/pem"
 	"log"
 )
+
+func main() {
+	s, v := GenerateKeyPair(2048)
+	log.Println(PublicKeyToBytes(v))
+	log.Println(string(PublicKeyToBytes(v)))
+	log.Println(PrivateKeyToBytes(s))
+}
 
 // GenerateKeyPair generates a new key pair
 func GenerateKeyPair(bits int) (*rsa.PrivateKey, *rsa.PublicKey) {
@@ -70,7 +77,7 @@ func BytesToPublicKey(pub []byte) *rsa.PublicKey {
 	block, _ := pem.Decode(pub)
 	enc := x509.IsEncryptedPEMBlock(block)
 	b := block.Bytes
-	var err Println
+	var err error
 	if enc {
 		log.Println("is encrypted pem block")
 		b, err = x509.DecryptPEMBlock(block, nil)
