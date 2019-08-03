@@ -7,7 +7,7 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
-func main() {
+func connect() {
 	// Connecting to local machine
 	// Have the address as a configurable element!!
 	client, err := ethclient.Dial("http://localhost:8545")
