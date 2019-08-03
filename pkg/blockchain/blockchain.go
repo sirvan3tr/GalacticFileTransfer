@@ -20,7 +20,7 @@ func CreateTx(toAdd string, privKey string, data string) (rawTxHex string){
 	// Connect to the Blockchain
     client := connect()
 
-    privateKey, err := crypto.HexToECDSA(privKey[2:])
+    privateKey, err := crypto.HexToECDSA(privKey)
     if err != nil {
         log.Fatal(err)
 	}

@@ -2,38 +2,55 @@ package auth
 
 import (
 	"crypto/rand"
+	"io"
 	"io/ioutil"
+	"os"
 	"log"
-
+	"encoding/hex"
+	"crypto/sha256"
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func NewFileEncrypt(fileDir string, fileName string) {
+func NewFileEncrypt(fileInput string) (sha256String string, key []byte, encrypted string,) {
 	// Generate the cipher key
-	key := make([]byte, 64)
+	key = make([]byte, 64)
 	_, err := rand.Read(key)
 	if err != nil {
 		log.Println(err)
 	}
 
 	// 1) Open and read the file
-	msg, err := ioutil.ReadFile(fileDir + fileName)
+	/*
+	file, err := ioutil.ReadFile(fileDir + fileName)
 	if err != nil {
 		log.Println("Error reading file", err)
 		return
+	} */
+
+	fileDesc, err := os.Open(fileInput)
+	if err != nil {
+		log.Fatal(err)
 	}
+	defer fileDesc.Close()
+
+	file, err := ioutil.ReadAll(fileDesc)
 
 	// 1.a) Hash the file
+	hsh := sha256.New()
+	if _, err := io.Copy(hsh, fileDesc); err != nil {
+	  log.Fatal(err)
+	}
+	hshInBytes := hsh.Sum(nil)
+	sha256String = hex.EncodeToString(hshInBytes)
 
 	// 2) Encrypt the file with AES
 	// Encryption
-	if encrypted, err := encrypt(key, msg); err != nil {
+	if encrypted, err := encrypt(key, file); err != nil {
 		log.Println(err)
 	} else {
-		err := writer(encrypted, fileDir+fileName+"_encryptedFile")
+		err := writer(encrypted, fileInput+"_encryptedFile")
 		if err != nil {
-			log.Println(err)
-			return
+			log.Fatal(err)
 		}
 		log.Printf("File has been encrypted")
 	}
@@ -53,4 +70,5 @@ func NewFileEncrypt(fileDir string, fileName string) {
 	// 5) Create transaction on the blockchain
 	//		Include fileID, fileLoc
 	// Call another package to do this
+	return
 }

@@ -10,7 +10,9 @@ import (
 func connect() (client *ethclient.Client){
 	// Connecting to local machine
 	// Have the address as a configurable element!!
-	client, err := ethclient.Dial("ws://localhost:8545")
+	
+	//client, err := ethclient.Dial("wss://ropsten.infura.io/ws")
+	client, err := ethclient.Dial("ws://localhost:9545")
 	if err != nil {
 		log.Fatal(err)
 	}
