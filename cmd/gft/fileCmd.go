@@ -3,17 +3,18 @@ package cmd
 import (
 	"fmt"
 	//"../../pkg/auth"
-	"github.com/spf13/cobra"
 	"../../pkg/blockchain"
+	"github.com/spf13/cobra"
 )
 
 func init() {
 	rootCmd.AddCommand(newFile)
+	rootCmd.AddCommand(showSent)
 	rootCmd.AddCommand(subscribe)
 }
 
 var newFile = &cobra.Command{
-	Use: "new",
+	Use:   "new",
 	Short: "Send a new file through GFT",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Sending a new file...")
@@ -34,8 +35,16 @@ var newFile = &cobra.Command{
 	},
 }
 
+var showSent = &cobra.Command{
+	Use:   "show-sent",
+	Short: "View sent files",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("Showing sent files")
+	},
+}
+
 var subscribe = &cobra.Command{
-	Use: "sub",
+	Use:   "sub",
 	Short: "Subscribe",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Listening to the blockchain for new transactions...")
