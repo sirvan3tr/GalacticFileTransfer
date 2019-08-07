@@ -10,6 +10,7 @@ import (
 func init() {
 	rootCmd.AddCommand(newFile)
 	rootCmd.AddCommand(showSent)
+	rootCmd.AddCommand(showReceived)
 	rootCmd.AddCommand(subscribe)
 }
 
@@ -42,7 +43,13 @@ var showSent = &cobra.Command{
 		fmt.Println("Showing sent files")
 	},
 }
-
+var showReceived = &cobra.Command{
+	Use:   "show-received",
+	Short: "View received files",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("Showing sent files")
+	},
+}
 var subscribe = &cobra.Command{
 	Use:   "sub",
 	Short: "Subscribe",
