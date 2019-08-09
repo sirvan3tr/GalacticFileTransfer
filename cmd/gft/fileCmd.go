@@ -1,9 +1,10 @@
 package cmd
 
 import (
-	"fmt"
-	//"../../pkg/auth"
+	"../../pkg/auth"
 	"../../pkg/blockchain"
+	"../../pkg/serverhttp"
+	"fmt"
 	"github.com/spf13/cobra"
 )
 
@@ -18,11 +19,24 @@ var newFile = &cobra.Command{
 	Use:   "new",
 	Short: "Send a new file through GFT",
 	Run: func(cmd *cobra.Command, args []string) {
+		// .. new [filename] [to:deeID]
 		fmt.Println("Sending a new file...")
 
 		// 1) Open and Encrypt the file
-		//hsh, aes, fEncrypted, rsaAes := NewFileEncrypt()
+		fileHash, aesRawKey, fEncrypted, rsaCipherString := auth.NewFileEncrypt(args[0])
+		fmt.Println("Hash of the file:")
+		fmt.Println(fileHash)
 
+		fmt.Println("Raw AES key:")
+		fmt.Println(aesRawKey)
+
+		fmt.Println("Encrypted file:")
+		fmt.Println(fEncrypted)
+
+		fmt.Println("RSA Cipher")
+		fmt.Println(rsaCipherString)
+
+		serverhttp.SendPost()
 		// 2) Transfer to File Server
 		// Transfer EncryptedFile & Encrypted AES Key
 
