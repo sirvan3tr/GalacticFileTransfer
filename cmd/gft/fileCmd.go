@@ -6,6 +6,7 @@ import (
 	"../../pkg/serverhttp"
 	"fmt"
 	"github.com/spf13/cobra"
+	"strings"
 )
 
 func init() {
@@ -13,6 +14,7 @@ func init() {
 	rootCmd.AddCommand(showSent)
 	rootCmd.AddCommand(showReceived)
 	rootCmd.AddCommand(subscribe)
+	rootCmd.AddCommand(sendTransaction)
 }
 
 var newFile = &cobra.Command{
@@ -43,8 +45,8 @@ var newFile = &cobra.Command{
 		// 3) Create TX on Blockchain
 		toAdd := "0x16978b95a180bf35a40f0fafa68e73d87aab4232"
 		privKey := "2c2952291448595ffe14276e8fc914644988625c1f441d6f7afd7cba1edd18ab"
-		data := "Hello World"
-		rawTx := blockchain.CreateTx(toAdd, privKey, data)
+		data := []string{"gft", fileHash}
+		rawTx := blockchain.CreateTx(toAdd, privKey, strings.Join(data, ","))
 		blockchain.SendTx(rawTx)
 		// 4) Create timeline
 	},
@@ -71,6 +73,21 @@ var subscribe = &cobra.Command{
 		fmt.Println("Listening to the blockchain for new transactions...")
 
 		blockchain.Sub()
+
+	},
+}
+
+var sendTransaction = &cobra.Command{
+	Use:   "send",
+	Short: "Send tx",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("Sending transaction")
+
+		toAdd := "0xf735d1bfb091ce9f50f797778633dfccb5d91310"
+		privKey := "2c2952291448595ffe14276e8fc914644988625c1f441d6f7afd7cba1edd18ab"
+		data := "Hello World"
+		rawTx := blockchain.CreateTx(toAdd, privKey, data)
+		blockchain.SendTx(rawTx)
 
 	},
 }

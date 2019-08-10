@@ -34,22 +34,25 @@ func Sub() {
 			log.Println(err)
             //log.Fatal(err)
 		case header := <-headers:
-			fmt.Println("New Header Coming In------------")
-			fmt.Println(context.Background())
-			fmt.Println("end of header heash----------------")
             fmt.Println(header.Hash().Hex()) // 0xbc10defa8dda384c96a17640d84de5578804945d347072e091b4e5f390ddea7f
             block, err := client.BlockByHash(context.Background(), header.Hash())
             if err != nil {
                 log.Fatal(err)
             }
 
-			fmt.Println("Hel")
             fmt.Println(header.Hash().Hex()) // 0xbc10defa8dda384c96a17640d84de5578804945d347072e091b4e5f390ddea7f
             fmt.Println(block.Hash().Hex())        // 0xbc10defa8dda384c96a17640d84de5578804945d347072e091b4e5f390ddea7f
             fmt.Println(block.Number().Uint64())   // 3477413
             //fmt.Println(block.Time().Uint64())     // 1529525947
             fmt.Println(block.Nonce())             // 130524141876765836
-            fmt.Println(len(block.Transactions())) // 7
+            fmt.Println("Txs in block: " + string(len(block.Transactions())))
+
+            txs := block.Transactions()
+            for _, element := range txs {
+                fmt.Println("To: " + element.To().String()) //To() returns common.Address
+                fmt.Println("Data: " + string(element.Data()))
+            }
+            
         }
     }
 }
