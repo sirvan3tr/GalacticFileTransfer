@@ -1,12 +1,14 @@
 package cmd
 
 import (
+	"fmt"
+	"strings"
+
 	"../../pkg/auth"
 	"../../pkg/blockchain"
+	"../../pkg/database"
 	"../../pkg/serverhttp"
-	"fmt"
 	"github.com/spf13/cobra"
-	"strings"
 )
 
 func init() {
@@ -63,7 +65,15 @@ var showReceived = &cobra.Command{
 	Use:   "show-received",
 	Short: "View received files",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Showing sent files")
+		fmt.Println("Showing received files")
+
+		// Shows all the files in the database
+		// captured by subscribing to the blocks
+		// TODO: have arg to show last 5 files
+		// TODO: need to capture data from users messaging server too
+		// -- because you could be missing a file if not subscribed
+		database.ListAllFiles()
+
 	},
 }
 var subscribe = &cobra.Command{
@@ -84,10 +94,11 @@ var sendTransaction = &cobra.Command{
 		fmt.Println("Sending transaction")
 
 		toAdd := "0xf735d1bfb091ce9f50f797778633dfccb5d91310"
-		privKey := "2c2952291448595ffe14276e8fc914644988625c1f441d6f7afd7cba1edd18ab"
+		privKey := "c7803a01bd3f699467d8ae09138ce1d2f182e75a07040f6a62f7af90d049635e"
 		data := "Hello World"
 		rawTx := blockchain.CreateTx(toAdd, privKey, data)
 		blockchain.SendTx(rawTx)
 
+		database.ListAllFiles()
 	},
 }

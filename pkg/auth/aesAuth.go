@@ -84,7 +84,6 @@ func notmain() {
 
 			if decrypted, err := decrypt(CIPHER_KEY, string(msg)); err != nil {
 				log.Println(err)
-
 			} else {
 				err := writer(decrypted, filedir+filename)
 				if err != nil {
