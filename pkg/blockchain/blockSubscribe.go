@@ -40,24 +40,15 @@ func Sub() {
 		log.Println(headers)
 		select {
 		case err := <-sub.Err():
-
-			log.Println(err)
-			//log.Fatal(err)
+			log.Fatal(err)
 		case header := <-headers:
-			fmt.Println(header.Hash().Hex()) // 0xbc10defa8dda384c96a17640d84de5578804945d347072e091b4e5f390ddea7f
 			block, err := client.BlockByHash(context.Background(), header.Hash())
 			if err != nil {
 				log.Fatal(err)
 			}
 
-			fmt.Println(header.Hash().Hex())     // 0xbc10defa8dda384c96a17640d84de5578804945d347072e091b4e5f390ddea7f
-			fmt.Println(block.Hash().Hex())      // 0xbc10defa8dda384c96a17640d84de5578804945d347072e091b4e5f390ddea7f
-			fmt.Println(block.Number().Uint64()) // 3477413
-			//fmt.Println(block.Time().Uint64())     // 1529525947
-			fmt.Println(block.Nonce()) // 130524141876765836
-			fmt.Println("Txs in block: " + string(len(block.Transactions())))
-
 			txs := block.Transactions()
+			fmt.Println("Txs in block: " + string(len(txs)))
 			for _, element := range txs {
 				fmt.Println("To: " + element.To().String()) //To() returns common.Address
 
@@ -66,12 +57,12 @@ func Sub() {
 					log.Fatal(err)
 				}
 
-				fmt.Println("From:")
-				fmt.Println(msg.From().Hex())
+				fmt.Println("From: " + msg.From().Hex())
 				fmt.Println("Data: " + string(element.Data()))
 
 				// Record files for us in the database
-				database.RecordFile("e", string(element.Data()))
+				// tx_address, tx_data, file_type
+				database.RecordFile(string(element.Hash().Hex()), string(element.Data()), "received")
 			}
 
 		}

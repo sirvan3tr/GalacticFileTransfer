@@ -8,24 +8,35 @@ import (
 
 // TODO: create a config file for the database.
 
-func openDB() (database *sql.DB) {
-	database, _ = sql.Open("sqlite3", "./gft.db")
+func DBFunc() (database *sql.DB, err error) {
+	database, err = sql.Open("sqlite3", "./gft.db")
 	defer database.Close()
+	if err != nil {
+		fmt.Println("Error opening the database")
+	} else {
+		// Create db if not there already
+		statement, _ := database.Prepare("CREATE TABLE IF NOT EXISTS files (id INTEGER PRIMARY KEY,from_add TEXT, local_file TEXT, tx_address TEXT, tx_data TEXT, file_hash TEXT, url TEXT, rsa_key TEXT, file_type TEXT)")
+		statement.Exec()
+		defer statement.Close()
+	}
 
-	// Create db if not there already
-	statement, _ := database.Prepare("CREATE TABLE IF NOT EXISTS files (id INTEGER PRIMARY KEY,from_add TEXT, local_file TEXT, tx_address TEXT, tx_data TEXT, file_hash TEXT, url TEXT, rsa_key TEXT)")
-	statement.Exec()
-	defer statement.Close()
-	fmt.Println("Opened DB successfuly")
 	return
 }
 
-func RecordFile(tx_address string, tx_data string) {
-	db, _ := sql.Open("sqlite3", "./gft.db")
+// fileType = 'received' OR 'sent'
+func RecordFile(tx_address string, tx_data string, fileType string) {
+	//db, _ := sql.Open("sqlite3", "./gft.db")
+	var db *sql.DB
+	db, err := openDB()
 	defer db.Close()
-	statement, _ := db.Prepare("INSERT INTO files (tx_address, tx_data) VALUES (?, ?)")
-	statement.Exec(tx_address, tx_data)
-	defer statement.Close()
+	if err != nil {
+		fmt.Println("Error opening the database")
+	} else {
+		statement, _ := db.Prepare("INSERT INTO files (tx_address, tx_data, file_type) VALUES (?, ?, ?)")
+		statement.Exec(tx_address, tx_data, fileType)
+		defer statement.Close()
+	}
+
 }
 
 func ListAllFiles() {

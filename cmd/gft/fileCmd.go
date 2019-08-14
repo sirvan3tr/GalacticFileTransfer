@@ -15,7 +15,7 @@ func init() {
 	rootCmd.AddCommand(newFile)
 	rootCmd.AddCommand(showSent)
 	rootCmd.AddCommand(showReceived)
-	rootCmd.AddCommand(subscribe)
+	rootCmd.AddCommand(subscribe)AddCommand
 	rootCmd.AddCommand(sendTransaction)
 }
 
@@ -40,13 +40,13 @@ var newFile = &cobra.Command{
 		fmt.Println("RSA Cipher")
 		fmt.Println(rsaCipherString)
 
-		serverhttp.SendPost()
 		// 2) Transfer to File Server
 		// Transfer EncryptedFile & Encrypted AES Key
+		serverhttp.SendPost()
 
 		// 3) Create TX on Blockchain
 		toAdd := "0x16978b95a180bf35a40f0fafa68e73d87aab4232"
-		privKey := "2c2952291448595ffe14276e8fc914644988625c1f441d6f7afd7cba1edd18ab"
+		privKey := "c7803a01bd3f699467d8ae09138ce1d2f182e75a07040f6a62f7af90d049635e"
 		data := []string{"gft", fileHash}
 		rawTx := blockchain.CreateTx(toAdd, privKey, strings.Join(data, ","))
 		blockchain.SendTx(rawTx)
