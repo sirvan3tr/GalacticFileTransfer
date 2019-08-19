@@ -15,7 +15,7 @@ func init() {
 	rootCmd.AddCommand(newFile)
 	rootCmd.AddCommand(showSent)
 	rootCmd.AddCommand(showReceived)
-	rootCmd.AddCommand(subscribe)AddCommand
+	rootCmd.AddCommand(subscribe)
 	rootCmd.AddCommand(sendTransaction)
 }
 

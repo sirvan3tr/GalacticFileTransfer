@@ -4,6 +4,14 @@ Data transfer system using blockchain
 
 Using the following structure:
 https://github.com/golang-standards/project-layout
+### Requirements
+In order to run this app you will require an Ethereum test node and a file server.
+
+1. Currently for development and testing purposes we are using truffle which is running the deeID application. deeID truffle app can be found here: https://github.com/sirvan3tr/deeID.Web
+
+2. File server: The architecture assumes that everyone has their own file server. In the future you should be able to connect together direclty - p2p.
+Use this simple file server: https://github.com/sirvan3tr/Gft.FileServer
+
 ## Assumptions
 ## Args
 Arguments passed to the app to carry out various functions.

@@ -27,7 +27,7 @@ func DBFunc() (database *sql.DB, err error) {
 func RecordFile(tx_address string, tx_data string, fileType string) {
 	//db, _ := sql.Open("sqlite3", "./gft.db")
 	var db *sql.DB
-	db, err := openDB()
+	db, err := DBFunc()
 	defer db.Close()
 	if err != nil {
 		fmt.Println("Error opening the database")
