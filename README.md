@@ -4,13 +4,19 @@ Data transfer system using blockchain
 
 Using the following structure:
 https://github.com/golang-standards/project-layout
-
+## Assumptions
 ## Args
 Arguments passed to the app to carry out various functions.
 
-1. new
-2. sub
-3. ...
+``./gft new [file] [to: deeID address]``
+
+Subscribe to the blockchain in order to record files that are being sent to me.
+``./gft sub``
+**TO DO: Have the user's messaging server handle this.
+
+``./gft view contacts``
+
+``./gft view files``
 
 ## Other
 ### Bugs and errors

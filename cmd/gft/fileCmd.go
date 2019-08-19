@@ -51,6 +51,8 @@ var newFile = &cobra.Command{
 		rawTx := blockchain.CreateTx(toAdd, privKey, strings.Join(data, ","))
 		blockchain.SendTx(rawTx)
 		// 4) Create timeline
+
+		// 5:) Update file server with the tx-id and the timeline info
 	},
 }
 
