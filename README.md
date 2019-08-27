@@ -13,6 +13,7 @@ In order to run this app you will require an Ethereum test node and a file serve
 Use this simple file server: https://github.com/sirvan3tr/Gft.FileServer
 
 ## Assumptions
+- Each node has their own particular file-server (though in the future we can make it a p2p as well)
 ## Args
 Arguments passed to the app to carry out various functions.
 
@@ -25,6 +26,12 @@ Subscribe to the blockchain in order to record files that are being sent to me.
 ``./gft view contacts``
 
 ``./gft view files``
+
+''./gft get-deeID``
+
+## To do:
+1. Password protect or encrypt the file that has the private keys and deeID. Can use the mobile deeID app to do this for us.
+
 
 ## Other
 ### Bugs and errors

@@ -19,11 +19,12 @@ func init() {
 	rootCmd.AddCommand(sendTransaction)
 }
 
+// ARGUMENTS:
+// .. new [filename] [to:deeID]
 var newFile = &cobra.Command{
 	Use:   "new",
 	Short: "Send a new file through GFT",
 	Run: func(cmd *cobra.Command, args []string) {
-		// .. new [filename] [to:deeID]
 		fmt.Println("Sending a new file...")
 
 		// 1) Open and Encrypt the file
@@ -45,7 +46,9 @@ var newFile = &cobra.Command{
 		serverhttp.SendPost()
 
 		// 3) Create TX on Blockchain
-		toAdd := "0x16978b95a180bf35a40f0fafa68e73d87aab4232"
+		toAdd := args[1]
+		// TODO: runchecks on the toAdd to ensure it is a valid address
+
 		privKey := "c7803a01bd3f699467d8ae09138ce1d2f182e75a07040f6a62f7af90d049635e"
 		data := []string{"gft", fileHash}
 		rawTx := blockchain.CreateTx(toAdd, privKey, strings.Join(data, ","))

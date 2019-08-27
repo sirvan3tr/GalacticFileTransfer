@@ -9,11 +9,13 @@ import (
 	"os"
 	"strings"
 
+	"../../pkg/gftconfigs"
 	"github.com/spf13/cobra"
 )
 
 func init() {
 	rootCmd.AddCommand(initProfile)
+	rootCmd.AddCommand(getDeeID)
 }
 
 type initFile struct {
@@ -22,6 +24,9 @@ type initFile struct {
 	PrivKey string `json:"privKey"`
 }
 
+// This is to initialise the process
+// record the essential information
+// that allows the process to do anything
 var initProfile = &cobra.Command{
 	Use:   "init",
 	Short: "Initiate user account",
@@ -29,17 +34,30 @@ var initProfile = &cobra.Command{
 
 		initF := initFile{}
 
+		// record the inputs from console
 		initF.DeeID = lineReader("Your deeID")
 		initF.PubKey = lineReader("Your Eth pubKey")
 		initF.PrivKey = lineReader("Your Eth privKey")
 
+		// create a JSON of the recorded strings
 		jsonBytes, err := json.Marshal(&initF)
 		if err != nil {
 			log.Fatal(err)
 		}
 
+		// create a file out of this.
+		// TODO: password protect this file
 		ioutil.WriteFile("personal.gft", jsonBytes, 0644)
 
+	},
+}
+
+var getDeeID = &cobra.Command{
+	Use:   "get-deeID",
+	Short: "Get the user account",
+	Run: func(cmd *cobra.Command, args []string) {
+		deeID := gftconfigs.GetMyDeeID()
+		fmt.Println(deeID)
 	},
 }
 
