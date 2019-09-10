@@ -7,11 +7,11 @@ import (
 	"net/http"
 )
 
-func SendPost() {
+func SendPost(fileEnc []byte, RSAencAESKey []byte) {
 	url := "http://127.0.0.1:5000/master"
 	fmt.Println("URL:>", url)
 
-	var jsonStr = []byte(`{"title":"Buy cheese and bread for breakfast."}`)
+	var jsonStr = fileEnc
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
 	req.Header.Set("X-Custom-Header", "myvalue")
 	req.Header.Set("Content-Type", "application/json")

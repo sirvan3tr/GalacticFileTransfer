@@ -27,7 +27,7 @@ Subscribe to the blockchain in order to record files that are being sent to me.
 
 ``./gft view files``
 
-''./gft get-deeID``
+``./gft get-deeID``
 
 ## To do:
 1. Password protect or encrypt the file that has the private keys and deeID. Can use the mobile deeID app to do this for us.

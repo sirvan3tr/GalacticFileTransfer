@@ -1,13 +1,18 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"strings"
 
 	"../../pkg/auth"
 	"../../pkg/blockchain"
 	"../../pkg/database"
+	"../../pkg/gftconfigs"
 	"../../pkg/serverhttp"
+	"../../pkg/timeline"
 	"github.com/spf13/cobra"
 )
 
@@ -43,18 +48,34 @@ var newFile = &cobra.Command{
 
 		// 2) Transfer to File Server
 		// Transfer EncryptedFile & Encrypted AES Key
-		serverhttp.SendPost()
+		serverhttp.SendPost([]byte(fEncrypted), []byte(rsaCipherString))
 
 		// 3) Create TX on Blockchain
 		toAdd := args[1]
 		// TODO: runchecks on the toAdd to ensure it is a valid address
 
-		privKey := "c7803a01bd3f699467d8ae09138ce1d2f182e75a07040f6a62f7af90d049635e"
+		//privKey := "c7803a01bd3f699467d8ae09138ce1d2f182e75a07040f6a62f7af90d049635e"
+		privKey := gftconfigs.GetMyPrivKey()
 		data := []string{"gft", fileHash}
 		rawTx := blockchain.CreateTx(toAdd, privKey, strings.Join(data, ","))
 		blockchain.SendTx(rawTx)
-		// 4) Create timeline
+		//TODO: returns errors for SendTX
 
+		// 4) Create timeline
+		fmt.Println("Adding timeline...")
+		node, err := timeline.AddFile(args[0], password)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		jsonBytes, err := json.Marshal(&node)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(string(jsonBytes))
+
+		filename := args[0] + ".gft"
+		ioutil.WriteFile(filename, jsonBytes, 0644)
 		// 5:) Update file server with the tx-id and the timeline info
 	},
 }
@@ -66,6 +87,7 @@ var showSent = &cobra.Command{
 		fmt.Println("Showing sent files")
 	},
 }
+
 var showReceived = &cobra.Command{
 	Use:   "show-received",
 	Short: "View received files",
