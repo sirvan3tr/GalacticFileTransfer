@@ -30,6 +30,9 @@ var newFile = &cobra.Command{
 	Use:   "new",
 	Short: "Send a new file through GFT",
 	Run: func(cmd *cobra.Command, args []string) {
+		// TODO: We need to ensure that the initial config
+		// 	has been ran before we can send files.
+
 		fmt.Println("Sending a new file...")
 
 		// 1) Open and Encrypt the file
@@ -63,7 +66,7 @@ var newFile = &cobra.Command{
 
 		// 4) Create timeline
 		fmt.Println("Adding timeline...")
-		node, err := timeline.AddFile(args[0], password)
+		node, err := timeline.AddFile(args[0], "password")
 		if err != nil {
 			log.Fatal(err)
 		}
